@@ -1,0 +1,105 @@
+2) Consider the following schema for Order Database:
+SALESMAN(Salesman_id, Name, City, Commission)
+CUSTOMER(Customer_id, Cust_Name, City, Grade, Salesman_id)
+ORDERS(Ord_No, Purchase_Amt, Ord_Date, Customer_id, Salesman_id)
+Write SQL queries to
+1. Count the customers with grades above Bangalore’s average.
+2. Find the name and numbers of all salesman who had more than one customer.
+3. List all the salesman and indicate those who have and don’t have customers in their cities (Use UNION operation.)
+4. Create a view that finds the salesman who has the customer with the highest order of a day.
+5. Demonstrate the DELETE operation by removing salesman with id 1000. All his orders must also be deleted
+
+
+					ORDERS DATABASE
+
+
+
+create table salesman(
+	salesmanid int,
+	name varchar(20),
+	city varchar(20),
+	commission int,
+	primary key(salesmanid)
+);
+desc salesman;
+
+create table customer(
+	customerid varchar(3),
+	custname varchar(20),
+	city varchar(20),
+	grade varchar(2),
+	salesmanid int,
+	primary key(customerid),
+	foreign key(salesmanid) references salesman(salesmanid)
+
+);
+desc customer;
+
+create table orders(
+	ord_no int,
+	purchaseamt int,
+	ord_date date,
+	customerid varchar(3),
+	salesmanid int,
+	primary key(ord_no),
+	foreign key(salesmanid) references salesman(salesmanid) ON DELETE CASCADE,
+	foreign key(customerid) references customer(customerid) 
+);
+desc orders;
+
+
+
+insert into salesman values
+(10,'Ashok','Bangalore',1000)
+
+insert into customer values
+('C1','Radha','Bangalore','A',10)
+
+insert into orders values
+(1,10000,'2017-01-15','C1',10)
+
+
+
+
+
+salesman table
+
++------------+---------+-----------+------------+
+| salesmanid | name    | city      | commission |
++------------+---------+-----------+------------+
+|         10 | Ashok   | Bangalore |       1000 |
+|         11 | Sanath  | Mangalore |        900 |
+|         12 | Rachana | Mysore    |        950 |
+|         13 | Sowmya  | Raichur   |        700 |
+|         14 | Ram     | Bangalore |       1500 |
++------------+---------+-----------+------------+   
+
+
+
+customer table
+
++------------+-----------+-----------+-------+------------+
+| customerid | custname  | city      | grade | salesmanid |
++------------+-----------+-----------+-------+------------+
+| C1         | Radha     | Bangalore | A     |         10 |
+| C2         | Raman     | Mysore    | B     |         12 |
+| C3         | Koushalya | Mangalore | C     |         11 |
+| C4         | Lakshmi   | Bangalore | A     |         14 |
+| C5         | Priya     | Raichur   | D     |         13 |
++------------+-----------+-----------+-------+------------+     
+
+
+
+orders
+
++--------+-------------+------------+------------+------------+
+| ord_no | purchaseamt | ord_date   | customerid | salesmanid |
++--------+-------------+------------+------------+------------+
+|      1 |       10000 | 2017-01-15 | C1         |         10 |
+|      2 |       15000 | 2017-01-15 | C2         |         12 |
+|      3 |        9000 | 2017-01-30 | C1         |         14 |
+|      4 |       12000 | 2017-01-17 | C3         |         11 |
+|      5 |       20000 | 2017-01-30 | C4         |         14 |
+|      6 |       18000 | 2017-01-25 | C5         |         13 |
+|      7 |       14000 | 2017-01-26 | C1         |         10 |
++--------+-------------+------------+------------+------------+
