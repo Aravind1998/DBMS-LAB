@@ -14,77 +14,81 @@ Write SQL queries to
 5. Create a view of all books and its number of copies that are currently available in the Library.
 
 					
-					LIBRARY DATABASE
+							LIBRARY DATABASE
 
 
+	   create table Publisher(
 
-insert into Publisher values
-('Pearson','Bangalore','9876543212'),
-('TMH','Delhi','9876543215'),
-('Oreilly','Hyderabad','9876543214'),
-('EEE','Chennai','9876543216'),
-('GK','Kolkata','9876543217')
+		Name varchar(20),
+		Address varchar(40),
+		Phone bigint(11),
+		primary key(Name)
+	);
+	desc Publisher;
+	
+
+	create table Book(
+		Book_ID int,
+		Title varchar(10),
+		Publisher_Name varchar(20),
+		Publish_Year date,
+		primary key(Book_ID),
+		foreign key(Publisher_Name) references Publisher(Name) 
+	);
+	
+
+	desc Book;
+	
+
+	create table Library_Branch(
+		Branch_ID int(2),
+		Branch_Name varchar(20),
+		Address varchar(40),
+		primary key(Branch_ID)
+	);
+	
+
+	desc Library_Branch;
+	
+
+	create table Book_Authors(
+		Book_ID int,
+		Author_Name varchar(20),
+		primary key(Book_ID),
+		foreign key(Book_ID) references Book(Book_ID) ON DELETE CASCADE
+	);
+	
+
+	desc Book_Authors;
+	
+
+	create table Book_Copies(
+		Book_ID int,
+		Branch_ID int(2),
+		No_of_Copies int,
+		primary key(Book_ID,Branch_ID),
+		foreign key(Book_ID) references Book(Book_ID),
+		foreign key(Branch_ID) references Library_Branch(Branch_ID) ON DELETE CASCADE
+	);
+	
+
+	desc Book_Copies;
+	
+
+	create table Book_Lending(
+		Book_ID int,
+		Branch_ID int(2),
+		Card_No int(5),
+		Date_Out date,
+		Due_Date date,
+		primary key(Book_ID,Branch_ID,Card_No),
+		foreign key(Book_ID) references Book(Book_ID),
+		foreign key(Branch_ID) references Library_Branch(Branch_ID) ON DELETE CASCADE
+	);
+	
+
+	desc Book_Lending;
 ;
-
-select * from Publisher;
-
-insert into Book values
-(1,'DBMS','Pearson','2017-07-01'),
-(2,'DS','TMH','2015-01-01'),
-(3,'DM','TMH','2012-08-01'),
-(4,'DAA','Pearson','2017-01-01'),
-(5,'OS','GK','2017-05-01')
-;
-
-select * from Book;
-
-insert into Library_Branch values
-(11,'Bangalore-South','E-City'),
-(22,'Bangalore-North','Gandhi Nagar'),
-(33,'Bangalore-West','Basavanagudi'),
-(44,'Bangalore-East','Malleshwaram'),
-(55,'Bangalore','Banashankari')
-;
-
-select * from Library_Branch;
-
-insert into Book_Authors values
-(1,'Navathe'),
-(2,'Teninbaum'),
-(3,'Galvin'),
-(4,'Navathe'),
-(5,'Kurose')
-;
-
-select * from Book_Authors;
-
-insert into Book_Copies values
-(1,11,10),
-(2,22,20),
-(3,11,15),
-(1,33,18),
-(4,44,12),
-(5,55,25),
-(3,44,30)
-;
-
-select * from Book_Copies;
-
-
-
-insert into Book_Lending values
-(1,11,111,'2017-01-01','2017-02-01'),
-(2,33,111,'2017-02-01','2017-03-01'),
-(1,22,222,'2015-01-01','2015-02-01'),
-(3,33,222,'2017-03-01','2017-04-01'),
-(4,55,555,'2017-01-01','2017-03-01'),
-(3,22,111,'2017-04-01','2017-05-01'),
-(4,44,111,'2017-06-01','2017-07-01'),
-(2,33,222,'2017-08-01','2017-09-01'),
-(4,22,222,'2017-08-01','2017-10-01')
-;
-
-select * from Book_Lending;
 
 
 insert into Publisher values
@@ -141,7 +145,7 @@ Library_Branch Table
 |        33 | Bangalore-West  | Basavanagudi |
 |        44 | Bangalore-East  | Malleshwaram |
 |        55 | Bangalore       | Banashankari |
-+-----------+-----------------+--------------+ 
++-----------+-----------------+--------------+
 
 
 Book_Authors Table
