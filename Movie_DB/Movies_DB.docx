@@ -1,0 +1,144 @@
+3) Consider the schema for Movie Database:
+ACTOR(Act_id, Act_Name, Act_Gender)
+DIRECTOR(Dir_id, Dir_Name, Dir_Phone)
+MOVIES(Mov_id, Mov_Title, Mov_Year, Mov_Lang, Dir_id)
+MOVIE_CAST(Act_id, Mov_id, Role)
+RATING(Mov_id, Rev_Stars)
+Write SQL queries to
+1. List the titles of all movies directed by ‘Hitchcock’.
+2. Find the movie names where one or more actors acted in two or more movies.
+3. List all actors who acted in a movie before 2000 and also in a movie after 2015 (use JOIN operation).
+4. Find the title of movies and number of stars for each movie that has at least one rating and find the highest number of stars that movie received. Sort the result by movie title.
+5. Update rating of all movies directed by ‘Steven Spielberg’ to 5.
+
+					    MOVIE DATABASE
+
+CREATE TABLE actor (
+	  actor_id int,
+	  actor_name varchar(20), 
+	  actor_gender varchar(20),
+	  PRIMARY KEY (actor_id)
+);
+desc actor;
+
+CREATE TABLE director (
+	  director_id int,
+	  director_name varchar(30), 
+	  director_ph bigint,
+	  PRIMARY KEY (director_id)
+) ;
+desc director;
+
+
+CREATE TABLE movie (
+	  movie_id int,
+	  movie_title varchar(40),
+	  movie_year year(4),
+	  movie_lang varchar(10),
+	  director_id int,
+	  PRIMARY KEY (movie_id),
+	  FOREIGN KEY (director_id) references director(director_id)   
+);
+desc movie;
+
+CREATE TABLE movie_cast (
+  actor_id int,
+  movie_id int,
+  role varchar(20),
+  PRIMARY KEY(actor_id,movie_id),
+  FOREIGN KEY (actor_id) references actor(actor_id),
+  FOREIGN KEY (movie_id) references movie(movie_id) 
+);
+desc movie_cast;
+
+CREATE TABLE rating (
+  movie_id int,
+  rev_stars int,
+  FOREIGN KEY(movie_id) references movie(movie_id)
+);
+desc rating;
+ 
+
+insert into actor values
+(1,'Rajkumar','M')
+
+insert into director values
+(11,'Puttana Kanagal','9876543212')
+
+insert into movie values
+(12,'Opearation Diamond Market',2000,'Kannada',11)
+
+insert into movie_cast values
+(1,12,'Hero')
+
+insert into rating values
+(12,3)
+
+
+actor table
+
++----------+------------+--------------+
+| actor_id | actor_name | actor_gender |
++----------+------------+--------------+
+|        1 | Rajkumar   | M            |
+|        2 | Sudeep     | M            |
+|        3 | Suhasini   | F            |
+|        4 | Shankarnag | M            |
+|        5 | Samanta    | F            |
+|        6 | Revathi    | F            |
++----------+------------+--------------+
+
+
+director table
+
++-------------+----------------------------+-------------+
+| director_id | director_name              | director_ph |
++-------------+----------------------------+-------------+
+|          11 | Puttana Kanagal            |  9876543212 |
+|          22 | Rajan Nagendra             |  9876543215 |
+|          33 | Nagathihalli Chandrashekar |  9876543214 |
+|          44 | Hitchcock                  |  9876543216 |
+|          55 | Steven Spielberg           |  9876543217 |
++-------------+----------------------------+-------------+                 
+
+
+
+movie table
+
++----------+---------------------------+------------+------------+-------------+
+| movie_id | movie_title               | movie_year | movie_lang | director_id |
++----------+---------------------------+------------+------------+-------------+
+|       12 | Opearation Diamond Market |       2000 | Kannada    |          11 |
+|       13 | Opearation Diamond Market |       2011 | English    |          44 |
+|       14 | Opearation Diamond Market |       1995 | English    |          55 |
+|       15 | Opearation Diamond Market |       2016 | Telugu     |          33 |
+|       16 | Opearation Diamond Market |       2000 | English    |          55 |
++----------+---------------------------+------------+------------+-------------+       
+
+
+
+movie_cast table
+
++----------+----------+--------+
+| actor_id | movie_id | role   |
++----------+----------+--------+
+|        1 |       12 | Hero   |
+|        2 |       15 | Hero   |
+|        3 |       12 | Heroin |
+|        3 |       16 | Heroin |
+|        4 |       14 | Hero   |
+|        5 |       14 | Heroin |
+|        6 |       13 | Heroin |
++----------+----------+--------+    
+
+
+rating table
++----------+-----------+
+| movie_id | rev_stars |
++----------+-----------+
+|       12 |         3 |
+|       13 |         2 |
+|       14 |         4 |
+|       15 |         3 |
+|       16 |         2 |
++----------+-----------+
