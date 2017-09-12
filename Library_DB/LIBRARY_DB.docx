@@ -1,0 +1,188 @@
+1)Consider the following schema for a Library Database:
+BOOK(Book_id, Title, Publisher_Name, Pub_Year)
+BOOK_AUTHORS(Book_id, Author_Name)
+PUBLISHER(Name, Address, Phone)
+BOOK_COPIES(Book_id, Branch_id, No-of_Copies)
+BOOK_LENDING(Book_id, Branch_id, Card_No, Date_Out, Due_Date)
+LIBRARY_BRANCH(Branch_id, Branch_Name, Address)
+Write SQL queries to
+1. Retrieve details of all books in the library – id, title, name of publisher, authors, number of copies in each branch, etc.
+2. Get the particulars of borrowers who have borrowed more than 3 books, but from Jan 2017 to Jun
+2017.
+3. Delete a book in BOOK table. Update the contents of other tables to reflect this data manipulation operation.
+4. Partition the BOOK table based on year of publication. Demonstrate its working with a simple query.
+5. Create a view of all books and its number of copies that are currently available in the Library.
+
+					
+					LIBRARY DATABASE
+
+
+
+insert into Publisher values
+('Pearson','Bangalore','9876543212'),
+('TMH','Delhi','9876543215'),
+('Oreilly','Hyderabad','9876543214'),
+('EEE','Chennai','9876543216'),
+('GK','Kolkata','9876543217')
+;
+
+select * from Publisher;
+
+insert into Book values
+(1,'DBMS','Pearson','2017-07-01'),
+(2,'DS','TMH','2015-01-01'),
+(3,'DM','TMH','2012-08-01'),
+(4,'DAA','Pearson','2017-01-01'),
+(5,'OS','GK','2017-05-01')
+;
+
+select * from Book;
+
+insert into Library_Branch values
+(11,'Bangalore-South','E-City'),
+(22,'Bangalore-North','Gandhi Nagar'),
+(33,'Bangalore-West','Basavanagudi'),
+(44,'Bangalore-East','Malleshwaram'),
+(55,'Bangalore','Banashankari')
+;
+
+select * from Library_Branch;
+
+insert into Book_Authors values
+(1,'Navathe'),
+(2,'Teninbaum'),
+(3,'Galvin'),
+(4,'Navathe'),
+(5,'Kurose')
+;
+
+select * from Book_Authors;
+
+insert into Book_Copies values
+(1,11,10),
+(2,22,20),
+(3,11,15),
+(1,33,18),
+(4,44,12),
+(5,55,25),
+(3,44,30)
+;
+
+select * from Book_Copies;
+
+
+
+insert into Book_Lending values
+(1,11,111,'2017-01-01','2017-02-01'),
+(2,33,111,'2017-02-01','2017-03-01'),
+(1,22,222,'2015-01-01','2015-02-01'),
+(3,33,222,'2017-03-01','2017-04-01'),
+(4,55,555,'2017-01-01','2017-03-01'),
+(3,22,111,'2017-04-01','2017-05-01'),
+(4,44,111,'2017-06-01','2017-07-01'),
+(2,33,222,'2017-08-01','2017-09-01'),
+(4,22,222,'2017-08-01','2017-10-01')
+;
+
+select * from Book_Lending;
+
+
+insert into Publisher values
+('Pearson','Bangalore','9876543212')
+
+insert into Book values
+(1,'DBMS','Pearson','2017-07-01')
+
+insert into Library_Branch values
+(11,'Bangalore-South','E-City')
+
+insert into Book_Authors values
+(1,'Navathe')
+
+insert into Book_Copies values
+(1,11,10)
+
+insert into Book_Lending values
+(1,11,111,'2017-01-01','2017-02-01')
+
+
+
+Publisher Table
+
++---------+-----------+------------+
+| Name    | Address   | Phone      |
++---------+-----------+------------+
+| EEE     | Chennai   | 9876543216 |
+| GK      | Kolkata   | 9876543217 |
+| Oreilly | Hyderabad | 9876543214 |
+| Pearson | Bangalore | 9876543212 |
+| TMH     | Delhi     | 9876543215 |
++---------+-----------+------------+
+Book Table
+
++---------+-------+----------------+--------------+
+| Book_ID | Title | Publisher_Name | Publish_Year |
++---------+-------+----------------+--------------+
+|       1 | DBMS  | Pearson        | 2017-07-01   |
+|       2 | DS    | TMH            | 2015-01-01   |
+|       3 | DM    | TMH            | 2012-08-01   |
+|       4 | DAA   | Pearson        | 2017-01-01   |
+|       5 | OS    | GK             | 2017-05-01   |
++---------+-------+----------------+--------------+
+
+
+Library_Branch Table
+
++-----------+-----------------+--------------+
+| Branch_ID | Branch_Name     | Address      |
++-----------+-----------------+--------------+
+|        11 | Bangalore-South | E-City       |
+|        22 | Bangalore-North | Gandhi Nagar |
+|        33 | Bangalore-West  | Basavanagudi |
+|        44 | Bangalore-East  | Malleshwaram |
+|        55 | Bangalore       | Banashankari |
++-----------+-----------------+--------------+ 
+
+
+Book_Authors Table
+
++---------+-------------+
+| Book_ID | Author_Name |
++---------+-------------+
+|       1 | Navathe     |
+|       2 | Teninbaum   |
+|       3 | Galvin      |
+|       4 | Navathe     |
+|       5 | Kurose      |
++---------+-------------+
+
+
+Book_Copies Table
+
++---------+-----------+--------------+
+| Book_ID | Branch_ID | No_of_Copies |
++---------+-----------+--------------+
+|       1 |        11 |           10 |
+|       1 |        33 |           18 |
+|       2 |        22 |           20 |
+|       3 |        11 |           15 |
+|       3 |        44 |           30 |
+|       4 |        44 |           12 |
+|       5 |        55 |           25 |
++---------+-----------+--------------+
+
+Book_Lending
+
++---------+-----------+---------+------------+------------+
+| Book_ID | Branch_ID | Card_No | Date_Out   | Due_Date   |
++---------+-----------+---------+------------+------------+
+|       1 |        11 |     111 | 2017-01-01 | 2017-02-01 |
+|       1 |        22 |     222 | 2015-01-01 | 2015-02-01 |
+|       2 |        33 |     111 | 2017-02-01 | 2017-03-01 |
+|       2 |        33 |     222 | 2017-08-01 | 2017-09-01 |
+|       3 |        22 |     111 | 2017-04-01 | 2017-05-01 |
+|       3 |        33 |     222 | 2017-03-01 | 2017-04-01 |
+|       4 |        22 |     222 | 2017-08-01 | 2017-10-01 |
+|       4 |        44 |     111 | 2017-06-01 | 2017-07-01 |
+|       4 |        55 |     555 | 2017-01-01 | 2017-03-01 |
++---------+-----------+---------+------------+------------+
