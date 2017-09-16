@@ -1,0 +1,236 @@
+
+
+5)Consider the schema for Company Database:
+EMPLOYEE(SSN, Name, Address, Sex, Salary, SuperSSN, DNo)
+DEPARTMENT(DNo, DName, MgrSSN, MgrStartDate)
+DLOCATION(DNo,DLoc)
+PROJECT(PNo, PName, PLocation, DNo)
+WORKS_ON(SSN, PNo, Hours)
+Write SQL queries to
+1. Make a list of all project numbers for projects that involve an employee whose last name is ‘Scott’, either as a worker or as a manager of the department that controls the project.
+2. Show the resulting salaries if every employee working on the ‘IoT’ project is given a 10 percent raise.
+3. Find the sum of the salaries of all employees of the ‘Accounts’ department, as well as the maximum salary, the minimum salary, and the average salary in this department
+4. Retrieve the name of each employee who works on all the projects controlled by department number 5 (use NOT EXISTS operator).
+5. For each department that has more than five employees, retrieve the department number and the number of its employees who are making more than Rs. 6,00,000.
+
+
+
+					Company Database
+
+
+create table Employee(Ssn varchar(15),primary key(Ssn));
+
+desc Employee;
+
+create table Department(DNo varchar(15),DName varchar(15),MgrSsn varchar(15),MgrStartDate Date,primary key(DNo),foreign key(MgrSsn) references Employee(Ssn));
+
+
+desc Department;
+
+alter table Employee add column(Name varchar(15),Address varchar(30),Sex varchar(15),Salary int,SuperSsn varchar(15),DNo varchar(15),foreign key(SuperSsn) references Employee(Ssn),foreign key(DNo) references Department(DNo));
+
+desc Employee;
+
+create table DLocation(DNo varchar(15),DLoc varchar(15),primary key(DNo,DLoc),foreign key(DNo) references Department(DNo));
+
+desc DLocation;
+
+create table Project(PNo varchar(15),PName varchar(15),PLocation varchar(15),DNo varchar(15),primary key(PNo),foreign key(DNo) references Department(DNo));
+
+desc Project;
+
+create table Works_On(Ssn varchar(15),PNo varchar(15),Hours float,primary key(Ssn,PNo),foreign key(Ssn) references Employee(Ssn),foreign key(PNo) references Project(PNo));
+
+desc Works_On;
+
+
+
+
+insert into Employee values('123456789','John','731 Fondren, Houston, TX','M','30000',NULL,Null);
+
+insert into Employee values('333445555','Franklin','638 Voss Houston, TX','M','40000',NULL,Null);
+
+insert into Employee values('999887777','Alicia','3321 Castle, Spring,TX','F','25000',NULL,Null);
+
+insert into Employee values('987654321','Jennifer','291 Berry, Bellaire, TX','F','43000',NULL,Null);
+
+insert into Employee values('666884444','Ramesh','975 Fire Oak,Humble, TX','M','38000',NULL,Null);
+
+insert into Employee values('453453453','Joyce','5631 Rice Houston, TX','F','25000',NULL,Null);
+
+insert into Employee values('987987987','Ahmad','980 Dallas, Houston TX','M','25000',NULL,Null);
+
+insert into Employee values('888665555','James','450 Stone, Houston TX','M','55000',NULL,Null);
+
+
+
+insert into Department values('5','Research','333445555','1988-05-22');
+
+insert into Department values('4','Administration','987654321','1995-01-01');
+
+insert into Department values('1','Headquarters','888665555','1981-06-19');
+
+
+
+update Employee set SuperSsn = '333445555' where Name = 'John';
+
+update Employee set SuperSsn = '888665555' where Name = 'Franklin';
+
+update Employee set SuperSsn = '987654321' where Name = 'Alicia';
+
+update Employee set SuperSsn = '888665555' where Name = 'Jennifer';
+
+update Employee set SuperSsn = '333445555' where Name = 'Ramesh';
+
+update Employee set SuperSsn = '333445555' where Name = 'Joyce';
+
+update Employee set SuperSsn = '987654321' where Name = 'Ahmad';
+
+update Employee set DNo = '5' where Name = 'John';
+
+update Employee set DNo = '5' where Name = 'Franklin';
+
+update Employee set DNo = '4' where Name = 'Alicia';
+
+update Employee set DNo = '4' where Name = 'Jennifer';
+
+update Employee set DNo = '5' where Name = 'Ramesh';
+
+update Employee set DNo = '5' where Name = 'Joyce';
+
+update Employee set DNo = '4' where Name = 'Ahmad';
+
+update Employee set DNo = '1' where Name = 'James';
+
+
+
+insert into DLocation values('1','Houston');
+
+insert into DLocation values('4','Stafford');
+
+insert into DLocation values('5','Bellaire');
+
+insert into DLocation values('5','Sugarlan');
+
+insert into DLocation values('5','Houston');
+
+
+
+insert into Project values('1','ProductX','Bellaire','5');
+
+insert into Project values('2','ProductY','Sugarland','5');
+
+insert into Project values('3','ProductZ','Houston','5');
+
+insert into Project values('10','Computerization','Stafford','4');
+
+insert into Project values('20','Reorganization','Houston','1');
+
+insert into Project values('30','NewBenefits','Stafford','4');
+
+
+
+insert into Works_On values('123456789','1','32.5');
+
+insert into Works_On values('123456789','2','7.5');
+
+insert into Works_On values('666884444','3','40.0');
+
+insert into Works_On values('453453453','1','20.0');
+
+insert into Works_On values('453453453','2','20.0');
+
+insert into Works_On values('333445555','2','10.0');
+
+insert into Works_On values('333445555','3','10.0');
+
+insert into Works_On values('333445555','10','10.0');
+
+insert into Works_On values('999887777','20','10.0');
+
+insert into Works_On values('999887777','30','30.0');
+
+insert into Works_On values('987987987','10','10.0');
+
+insert into Works_On values('987987987','10','35.0');
+
+insert into Works_On values('987987987','30','5.0');
+
+insert into Works_On values('987654321','30','20.0');
+
+insert into Works_On values('987654321','20','15.0');
+
+insert into Works_On values('888665555','20',NULL);
+
+
+Employee Table (Partial)
+
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| Ssn   | varchar(15) | NO   | PRI | NULL    |       |
++-------+-------------+------+-----+---------+-------+    
+
+Department Table
+
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| DNo          | varchar(15) | NO   | PRI | NULL    |       |
+| DName        | varchar(15) | YES  |     | NULL    |       |
+| MgrSsn       | varchar(15) | YES  | MUL | NULL    |       |
+| MgrStartDate | date        | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+  
+
+
+
+
+
+
+
+
+
+
+Employee Table (Complete)
+
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| Ssn      | varchar(15) | NO   | PRI | NULL    |       |
+| Name     | varchar(15) | YES  |     | NULL    |       |
+| Address  | varchar(30) | YES  |     | NULL    |       |
+| Sex      | varchar(15) | YES  |     | NULL    |       |
+| Salary   | int(11)     | YES  |     | NULL    |       |
+| SuperSsn | varchar(15) | YES  | MUL | NULL    |       |
+| DNo      | varchar(15) | YES  | MUL | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+
+DLocation Table
+
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| DNo   | varchar(15) | NO   | PRI | NULL    |       |
+| DLoc  | varchar(15) | NO   | PRI | NULL    |       |
++-------+-------------+------+-----+---------+-------+  
+
+Project Table
+
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| PNo       | varchar(15) | NO   | PRI | NULL    |       |
+| PName     | varchar(15) | YES  |     | NULL    |       |
+| PLocation | varchar(15) | YES  |     | NULL    |       |
+| DNo       | varchar(15) | YES  | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+
+Works_On Table
+
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| Ssn   | varchar(15) | NO   | PRI | NULL    |       |
+| PNo   | varchar(15) | NO   | PRI | NULL    |       |
+| Hours | float       | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
