@@ -1,0 +1,195 @@
+4)Consider the schema for College Database:
+
+STUDENT(USN, SName, Address, Phone, Gender)
+
+SEMSEC(SSID, Sem, Sec)
+
+CLASS(USN, SSID)
+
+SUBJECT(Subcode, Title, Sem, Credits)
+
+IAMARKS(USN, Subcode, SSID, Test1, Test2, Test3, FinalIA)
+
+Write SQL queries to
+
+1. List all the student details studying in fourth semester ‘C’ section.
+
+2. Compute the total number of male and female students in each semester and in each section.
+
+3. Create a view of Test1 marks of student USN ‘1BI15CS101’ in all subjects.
+
+4. Calculate the FinalIA (average of best two test marks) and update the corresponding table for all students.
+
+5. Categorize students based on the following criterion:
+
+If FinalIA = 17 to 20 then CAT = ‘Outstanding’
+
+If FinalIA = 12 to 16 then CAT = ‘Average’
+
+If FinalIA< 12 then CAT = ‘Weak’
+
+Give these details only for 8 th semester A, B, and C section students.
+
+
+						                                              College_DB
+
+
+create table Student (Usn varchar(20),SName varchar(20),Address varchar(20),Phone bigint,Gender varchar(20),primary key(Usn));
+
+desc Student;
+
+create table SemSec(Ssid varchar(10),Sem int,Sec varchar(5),primary key(Ssid));
+
+desc SemSec;
+
+create table Class(Usn varchar(20),Ssid varchar(10),primary key(Usn,Ssid),foreign key(Usn) references Student(Usn),foreign key(Ssid) references SemSec(Ssid));
+
+desc Class;
+
+create table Subject(Subcode varchar(20),Title varchar(10),Sem int,Credits int,primary key(Subcode));
+
+desc Subject;
+
+create table IAMarks(Usn varchar(20),Subcode varchar(20),Ssid varchar(10),Test1 int,Test2 int,Test3 int,FinalIA int,primary key(Usn,Subcode,FinalIA),foreign key(Usn) references Student(Usn),foreign key(Ssid) references SemSec(Ssid),foreign key(Subcode) references Subject(Subcode));
+
+desc IAMarks;
+
+
+
+insert into Student values
+	('1BI15CS101','Anitha','Basavanagudi','9876543212','F'),
+	('1BI15CS102','Sunitha','Banashankari','9876543215','F'),
+	('1BI15CS103','Varsha','Koramangala','9876543214','F'),
+	('1BI15CS104','Ram','Koramangala','9876543216','M'),
+	('1BI15CS105','Shyam','Begur','9876543217','M'),
+	('1BI15CS106','Kumar','HSR','98765432189','M');
+
+select * from Student;
+
+
+insert into SemSec values
+	('S1',4,'A'),
+	('S2',4,'C'),
+	('S3',5,'A'),
+	('S4',5,'B'),
+	('S5',7,'A'),
+	('S6',7,'B')
+;
+
+select * from SemSec;
+
+
+insert into Class values
+	('1BI15CS101','S1'),
+	('1BI15CS102','S2'),
+	('1BI15CS103','S3'),
+	('1BI15CS104','S4'),
+	('1BI15CS105','S5'),
+	('1BI15CS106','S6')
+;
+
+select * from Class;
+
+
+insert into Subject values
+	('15CS053','DBMS',5,3),
+	('15CS074','DM',7,4),
+	('15CS034','DS',3,4),
+	('15CS055','ATC',5,4),
+	('15CS075','C#',7,3),
+	('15CS035','DMS',3,3)
+;
+
+select * from Subject;
+
+
+insert into IAMarks values
+	('1BI15CS101','15CS053','S1',18,18,19,19),
+	('1BI15CS102','15CS074','S2',15,15,11,15),
+	('1BI15CS103','15CS034','S3',15,13,13,14),
+	('1BI15CS104','15CS055','S4',19,18,20,20),
+	('1BI15CS105','15CS075','S5',16,16,16,16),
+	('1BI15CS106','15CS035','S6',10,10,11,11),
+	('1BI15CS101','15CS055','S1',15,15,11,15),
+	('1BI15CS102','15CS075','S2',15,13,13,14),
+	('1BI15CS103','15CS035','S3',19,18,20,20),
+	('1BI15CS104','15CS053','S4',19,20,20,20),
+	('1BI15CS105','15CS074','S5',10,11,11,11),
+	('1BI15CS106','15CS034','S6',17,16,17,17)
+;
+
+select * from IAMarks;
+
+
+Student Table
+
++------------+---------+--------------+-------------+--------+
+| Usn        | SName   | Address      | Phone       | Gender |
++------------+---------+--------------+-------------+--------+
+| 1BI15CS101 | Anitha  | Basavanagudi |  9876543212 | F      |
+| 1BI15CS102 | Sunitha | Banashankari |  9876543215 | F      |
+| 1BI15CS103 | Varsha  | Koramangala  |  9876543214 | F      |
+| 1BI15CS104 | Ram     | Koramangala  |  9876543216 | M      |
+| 1BI15CS105 | Shyam   | Begur        |  9876543217 | M      |
+| 1BI15CS106 | Kumar   | HSR          | 98765432189 | M      |
++------------+---------+--------------+-------------+--------+
+
+
+SemSec Table
+
++------+------+------+
+| Ssid | Sem  | Sec  |
++------+------+------+
+| S1   |    4 | A    |
+| S2   |    4 | C    |
+| S3   |    5 | A    |
+| S4   |    5 | B    |
+| S5   |    7 | A    |
+| S6   |    7 | B    |
++------+------+------+
+
+Class Table
+
++------------+------+
+| Usn        | Ssid |
++------------+------+
+| 1BI15CS101 | S1   |
+| 1BI15CS102 | S2   |
+| 1BI15CS103 | S3   |
+| 1BI15CS104 | S4   |
+| 1BI15CS105 | S5   |
+| 1BI15CS106 | S6   |
++------------+------+
+
+
+Subject Table
+
++---------+-------+------+---------+
+| Subcode | Title | Sem  | Credits |
++---------+-------+------+---------+
+| 15CS034 | DS    |    3 |       4 |
+| 15CS035 | DMS   |    3 |       3 |
+| 15CS053 | DBMS  |    5 |       3 |
+| 15CS055 | ATC   |    5 |       4 |
+| 15CS074 | DM    |    7 |       4 |
+| 15CS075 | C#    |    7 |       3 |
++---------+-------+------+---------+
+
+IAMarks Table
+
++------------+---------+------+-------+-------+-------+---------+
+| Usn        | Subcode | Ssid | Test1 | Test2 | Test3 | FinalIA |
++------------+---------+------+-------+-------+-------+---------+
+| 1BI15CS101 | 15CS053 | S1   |    18 |    18 |    19 |      19 |
+| 1BI15CS101 | 15CS055 | S1   |    15 |    15 |    11 |      15 |
+| 1BI15CS102 | 15CS074 | S2   |    15 |    15 |    11 |      15 |
+| 1BI15CS102 | 15CS075 | S2   |    15 |    13 |    13 |      14 |
+| 1BI15CS103 | 15CS034 | S3   |    15 |    13 |    13 |      14 |
+| 1BI15CS103 | 15CS035 | S3   |    19 |    18 |    20 |      20 |
+| 1BI15CS104 | 15CS053 | S4   |    19 |    20 |    20 |      20 |
+| 1BI15CS104 | 15CS055 | S4   |    19 |    18 |    20 |      20 |
+| 1BI15CS105 | 15CS074 | S5   |    10 |    11 |    11 |      11 |
+| 1BI15CS105 | 15CS075 | S5   |    16 |    16 |    16 |      16 |
+| 1BI15CS106 | 15CS034 | S6   |    17 |    16 |    17 |      17 |
+| 1BI15CS106 | 15CS035 | S6   |    10 |    10 |    11 |      11 |
++------------+---------+------+-------+-------+-------+---------+
