@@ -12,7 +12,7 @@ create table Book(
 	Publisher_Name varchar(20),
 	Publish_Year date,
 	primary key(Book_ID),
-	foreign key(Publisher_Name) references Publisher(Name) 
+	foreign key(Publisher_Name) references Publisher(Name) ON DELETE CASCADE
 );
 
 desc Book;
@@ -40,7 +40,7 @@ create table Book_Copies(
 	Branch_ID int(2),
 	No_of_Copies int,
 	primary key(Book_ID,Branch_ID),
-	foreign key(Book_ID) references Book(Book_ID),
+	foreign key(Book_ID) references Book(Book_ID) ON DELETE CASCADE,
 	foreign key(Branch_ID) references Library_Branch(Branch_ID) ON DELETE CASCADE
 );
 
@@ -53,7 +53,7 @@ create table Book_Lending(
 	Date_Out date,
 	Due_Date date,
 	primary key(Book_ID,Branch_ID,Card_No),
-	foreign key(Book_ID) references Book(Book_ID),
+	foreign key(Book_ID) references Book(Book_ID) ON DELETE CASCADE,
 	foreign key(Branch_ID) references Library_Branch(Branch_ID) ON DELETE CASCADE
 );
 
