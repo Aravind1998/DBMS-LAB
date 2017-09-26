@@ -19,10 +19,10 @@ select * from director;
 
 insert into movie values
 (12,'Opearation Diamond Market',2000,'Kannada',11),
-(13,'Opearation Diamond Market',2011,'English',44),
-(14,'Opearation Diamond Market',1995,'English',55),
-(15,'Opearation Diamond Market',2016,'Telugu',33),
-(16,'Opearation Diamond Market',2000,'English',55)
+(13,'Mythr- My friend',2011,'English',44),
+(14,'Malgudi days',1995,'English',55),
+(15,'Ehega',2016,'Telugu',33),
+(16,'Mummy',2000,'English',55)
 ;
 select * from movie;
 
